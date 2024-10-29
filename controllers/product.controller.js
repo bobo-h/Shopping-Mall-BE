@@ -32,4 +32,13 @@ productController.createProduct = async (req, res) => {
   }
 };
 
+productController.getProducts = async (req, res) => {
+  try {
+    const products = await Product.find({}); // 조건 없이 모든 값을 찾아오겠다는 것
+    res.status(200).json({ status: "success", data: products });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
+  }
+};
+
 module.exports = productController;
