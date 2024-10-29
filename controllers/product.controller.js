@@ -43,7 +43,7 @@ productController.getProducts = async (req, res) => {
     if (page) {
       query.skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE);
       // 데이터 총 몇개인지 = 총 개수 / PAGE_SIZE
-      const totalItemNum = await Product.find(cond).count();
+      const totalItemNum = await Product.countDocuments(cond);
       const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
       response.totalPageNum = totalPageNum;
     }
