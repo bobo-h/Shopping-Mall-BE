@@ -34,8 +34,14 @@ productController.createProduct = async (req, res) => {
 
 productController.getProducts = async (req, res) => {
   try {
-    const products = await Product.find({}); // 조건 없이 모든 값을 찾아오겠다는 것
-    res.status(200).json({ status: "success", data: products });
+    const { page, name } = req.query;
+    // 정규화로 키워드가 포함인 상품까지 = regex / 대소문자 구분 없이 = option:"i"
+    const cond = name ? { name: { $regex: name, $option: "i" } } : {};
+    let query = Product.find(cond);
+
+    // query를 실행시키고 싶을 때 하겠다는 것 = exec()
+    const productList = await query.exec();
+    res.status(200).json({ status: "success", data: productList });
   } catch (error) {
     res.status(400).json({ status: "fail", error: error.message });
   }
