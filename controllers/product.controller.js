@@ -37,7 +37,10 @@ productController.getProducts = async (req, res) => {
   try {
     const { page, name } = req.query;
     // 정규화로 키워드가 포함인 상품까지 = regex / 대소문자 구분 없이 = options:"i"
-    const cond = name ? { name: { $regex: name, $options: "i" } } : {};
+    const cond = { isDelete: false };
+    if (name) {
+      cond.name = { $regex: name, $options: "i" };
+    }
     let query = Product.find(cond).sort({ createdAt: -1 });
     let response = { status: "success" };
     if (page) {
@@ -77,6 +80,21 @@ productController.updateProduct = async (req, res) => {
       { new: true }
     );
     if (!product) throw new Error("item doesn't exist");
+    res.status(200).json({ status: "success", product });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
+  }
+};
+
+productController.deleteProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await Product.findByIdAndUpdate(
+      { _id: productId },
+      { isDelete: true },
+      { new: true }
+    );
+    if (!product) throw new Error("Item doesn't exist");
     res.status(200).json({ status: "success", product });
   } catch (error) {
     res.status(400).json({ status: "fail", error: error.message });

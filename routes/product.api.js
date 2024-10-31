@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const productController = require("../controllers/product.controller.js");
 const authController = require("../controllers/auth.controller");
+const productController = require("../controllers/product.controller.js");
 
 router.post(
   "/",
@@ -17,6 +17,13 @@ router.put(
   authController.authenticate,
   authController.checkAdminPermission,
   productController.updateProduct
+);
+
+router.delete(
+  "/:id",
+  authController.authenticate,
+  authController.checkAdminPermission,
+  productController.deleteProduct
 );
 
 module.exports = router;
