@@ -38,7 +38,7 @@ productController.getProducts = async (req, res) => {
     const { page, name } = req.query;
     // 정규화로 키워드가 포함인 상품까지 = regex / 대소문자 구분 없이 = options:"i"
     const cond = name ? { name: { $regex: name, $options: "i" } } : {};
-    let query = Product.find(cond);
+    let query = Product.find(cond).sort({ createdAt: -1 });
     let response = { status: "success" };
     if (page) {
       query.skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE);
