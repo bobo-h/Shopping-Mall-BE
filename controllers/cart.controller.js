@@ -12,7 +12,7 @@ cartController.addItemToCart = async (req, res) => {
       await cart.save();
     }
     // 있다면 이미 들어있는 아이템의 id와 사이즈가 같은지 확인
-    const existItem = cart.items.fine(
+    const existItem = cart.items.find(
       // mongoose.ObjectId(=productId)는 str값이 아니기에 size 비교와 다르게 equals 함수를 사용해 비교
       (item) => item.productId.equals(productId) && item.size === size
     );
