@@ -5,5 +5,6 @@ const authController = require("../controllers/auth.controller");
 const router = express.Router();
 
 router.post("/", authController.authenticate, cartController.addItemToCart);
+router.get("/", authController.authenticate, cartController.getCartList);
 
 module.exports = router;
