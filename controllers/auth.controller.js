@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const Cart = require("../models/Cart");
 require("dotenv").config();
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
@@ -14,7 +15,13 @@ authController.loginWithEmail = async (req, res) => {
       const isMatch = await bcrypt.compareSync(password, user.password);
       if (isMatch) {
         const token = await user.generateToken();
-        return res.status(200).json({ status: "success", user, token });
+
+        // 유저의 장바구니 가져오기
+        const cart = await Cart.findOne({ userId: user._id });
+        const cartItemQty = cart ? cart.items.length : 0;
+        return res
+          .status(200)
+          .json({ status: "success", user, token, cartItemQty });
       }
     }
     throw new Error("이메일 또는 비밀번호를 다시 확인해주세요");
