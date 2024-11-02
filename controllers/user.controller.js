@@ -1,3 +1,4 @@
+const Cart = require("../models/Cart");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 
@@ -29,10 +30,13 @@ userController.getUser = async (req, res) => {
   try {
     const { userId } = req;
     const user = await User.findById(userId);
-    if (user) {
-      res.status(200).json({ status: "success", user });
-    }
-    throw new Error("can not find user");
+    if (!user) throw new Error("can not find user");
+
+    // 유저의 장바구니 가져오기
+    const cart = await Cart.findOne({ userId });
+    const cartItemQty = cart ? cart.items.length : 0;
+
+    res.status(200).json({ status: "success", user, cartItemQty });
   } catch (error) {
     res.status(400).json({ status: "fail", error: error.message });
   }
