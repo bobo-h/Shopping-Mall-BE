@@ -6,7 +6,7 @@ cartController.addItemToCart = async (req, res) => {
     const { userId } = req;
     const { productId, size, qty } = req.body;
     // 해당 유저의 카트 찾고 없다면 만들어주고
-    let cart = await Cart.fineOne({ userId });
+    let cart = await Cart.findOne({ userId });
     if (!cart) {
       cart = new Cart({ userId });
       await cart.save();
