@@ -5,10 +5,10 @@ const Schema = mongoose.Schema;
 const orderSchema = Schema(
   {
     userId: { type: mongoose.ObjectId, ref: User, required: true },
-    shipTo: { type: String, required: true },
+    shipTo: { type: Object, required: true },
     contact: { type: Object, required: true },
-    totalPrice: { type: Number, required: true },
-    status: { type: Object, default: "preparing" },
+    totalPrice: { type: Number, required: true, default: 0 },
+    status: { type: String, default: "preparing" },
     orderNum: { type: String },
     items: [
       {
