@@ -6,9 +6,9 @@ const orderController = {};
 
 orderController.createOrder = async (req, res) => {
   try {
-    // 프론트에서 보낸 데이터 받아옴(userId, totalprice, shipTp, contact, orderList..)
+    // 프론트에서 보낸 데이터 받아옴(userId, totalPrice, shipTo, contact, orderList..)
     const { userId } = req;
-    const { shipTp, contact, totalPrice, orderList } = req.body;
+    const { shipTo, contact, totalPrice, orderList } = req.body;
     // 재고 확인(주문 때 말고 장바구니에서 확인하는 방법도 있다.) & 재고 업데이트
     const insufficientStockItems = await productController.checkItemListStock(
       orderList
@@ -25,7 +25,7 @@ orderController.createOrder = async (req, res) => {
     const newOrder = new Order({
       userId,
       totalPrice,
-      shipTp,
+      shipTo,
       contact,
       items: orderList,
       orderNum: randomStringGenerator(),
