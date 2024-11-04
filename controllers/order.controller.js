@@ -24,7 +24,7 @@ orderController.createOrder = async (req, res) => {
     // order 생성
     const newOrder = new Order({
       userId,
-      totalprice,
+      totalPrice,
       shipTp,
       contact,
       items: orderList,
