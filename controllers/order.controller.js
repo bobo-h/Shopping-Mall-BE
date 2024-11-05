@@ -30,9 +30,8 @@ orderController.createOrder = async (req, res) => {
       items: orderList,
       orderNum: randomStringGenerator(),
     });
-
-    // orderNum 생성
     await newOrder.save();
+    // save 후에 카트 비워주기 -> 스키마에 작성
     res.status(200).json({ status: "success", orderNum: newOrder.orderNum });
   } catch (error) {
     res.status(400).json({ status: "fail", error: error.message });
