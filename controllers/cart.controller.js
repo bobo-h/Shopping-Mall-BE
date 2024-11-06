@@ -1,4 +1,3 @@
-const { populate } = require("dotenv");
 const Cart = require("../models/Cart");
 const cartController = {};
 
