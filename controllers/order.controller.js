@@ -68,6 +68,7 @@ orderController.getOrderList = async (req, res) => {
         populate: { path: "productId", model: "Product" },
         select: "image name",
       })
+      .sort({ createdAt: -1 })
       .skip((page - 1) * PAGE_SIZE)
       .limit(PAGE_SIZE);
     const totalItemNum = await Order.find(cond).countDocuments();
