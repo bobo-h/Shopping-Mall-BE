@@ -52,7 +52,7 @@ orderController.getOrder = async (req, res) => {
   }
 };
 
-orderController.getOrderList = async (req, res) => {
+orderController.getOrderList = async (req, res, next) => {
   try {
     const { page, ordernum } = req.query;
     let cond = {};
@@ -66,10 +66,11 @@ orderController.getOrderList = async (req, res) => {
       .populate({
         path: "items",
         populate: { path: "productId", model: "Product" },
+        select: "image name",
       })
       .skip((page - 1) * PAGE_SIZE)
       .limit(PAGE_SIZE);
-    const totalItemNum = await Order.countDocuments(cond);
+    const totalItemNum = await Order.find(cond).count();
     const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
     res.status(200).json({ status: "success", data: orderList, totalPageNum });
   } catch (error) {
