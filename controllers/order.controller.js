@@ -70,7 +70,7 @@ orderController.getOrderList = async (req, res, next) => {
       })
       .skip((page - 1) * PAGE_SIZE)
       .limit(PAGE_SIZE);
-    const totalItemNum = await Order.find(cond).count();
+    const totalItemNum = await Order.countDocuments(cond);
     const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
     res.status(200).json({ status: "success", data: orderList, totalPageNum });
   } catch (error) {
