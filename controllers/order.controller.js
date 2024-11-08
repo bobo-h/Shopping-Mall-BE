@@ -52,7 +52,7 @@ orderController.getOrder = async (req, res) => {
   }
 };
 
-orderController.getOrderList = async (req, res, next) => {
+orderController.getOrderList = async (req, res) => {
   try {
     const { page, ordernum } = req.query;
     let cond = {};
@@ -70,7 +70,7 @@ orderController.getOrderList = async (req, res, next) => {
       })
       .skip((page - 1) * PAGE_SIZE)
       .limit(PAGE_SIZE);
-    const totalItemNum = await Order.countDocuments(cond);
+    const totalItemNum = await Order.find(cond).countDocuments();
     const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
     res.status(200).json({ status: "success", data: orderList, totalPageNum });
   } catch (error) {
@@ -87,9 +87,8 @@ orderController.updateOrder = async (req, res, next) => {
       { status: status },
       { new: true }
     );
-    if (!order) throw new Error("Can't find order");
-
-    res.status(200).json({ status: "success", data: order });
+    if (!order) throw new Error("주문 내역이 없습니다.");
+    next();
   } catch (error) {
     return res.status(400).json({ status: "fail", error: error.message });
   }

@@ -10,7 +10,8 @@ router.put(
   "/:id",
   authController.authenticate,
   authController.checkAdminPermission,
-  orderController.updateOrder
+  orderController.updateOrder,
+  orderController.getOrderList
 );
 
 module.exports = router;
