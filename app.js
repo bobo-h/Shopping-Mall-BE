@@ -22,8 +22,6 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200,
 };
-// 로그아웃처럼 인증 관련 작업에서 OPTIONS 메서드로 CORS 사전 검사 요청이 발생가능
-// 모든 경로에 대해 OPTIONS 메서드를 허용하도록 미들웨어("*")를 추가
 app.use(cors(corsOptions));
 
 app.use(bodyParser.urlencoded({ extended: false }));

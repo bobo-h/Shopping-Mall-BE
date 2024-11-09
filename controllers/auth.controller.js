@@ -27,25 +27,15 @@ authController.loginWithEmail = async (req, res) => {
 
 authController.loginWithGoogle = async (req, res) => {
   try {
-    // 백엔드에서 로그인하기
-    // 토큰값을 읽어와서 => 유저정보를 뽑아내고 email
-    // a. 이미 로그인을 한적이 있는 유저 => 로그인 시키고 토큰값 준다
-    // b. 처음 로그인 시도를 한 유저 => 유저 정보 먼저 새로 생성하고 토큰 값을 준다.
     const { token } = req.body;
     const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
-
-    // 구글에서 만든 토큰이 맞는지 확인
     const ticket = await googleClient.verifyIdToken({
       idToken: token,
       audience: GOOGLE_CLIENT_ID,
     });
-
     const { email, name } = ticket.getPayload();
-
-    // 유저가 존재하는지 찾기
     let user = await User.findOne({ email });
     if (!user) {
-      // 없다 -> 유저를 새로 생성
       const randomPassword = "" + Math.floor(Math.random() * 10000000);
       const salt = await bcrypt.genSalt(10);
       const newPassword = await bcrypt.hash(randomPassword, salt);
@@ -56,7 +46,6 @@ authController.loginWithGoogle = async (req, res) => {
       });
       await user.save();
     }
-    // 토큰발행 리턴
     const sessionToken = await user.generateToken();
     res.status(200).json({ status: "success", user, token: sessionToken });
   } catch (error) {
