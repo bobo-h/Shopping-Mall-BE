@@ -89,7 +89,7 @@ orderController.updateOrder = async (req, res, next) => {
       { new: true }
     );
     if (!order) throw new Error("주문 내역이 없습니다.");
-    next();
+    res.status(200).json({ status: "success", data: order });
   } catch (error) {
     return res.status(400).json({ status: "fail", error: error.message });
   }
