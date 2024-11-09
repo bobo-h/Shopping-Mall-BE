@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
-const { GoogleAuth } = require("google-auth-library");
+const { OAuth2Client } = require("google-auth-library");
 require("dotenv").config();
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -47,7 +47,7 @@ authController.loginWithGoogle = async (req, res) => {
     let user = await User.findOne({ email });
     if (!user) {
       // 없다 -> 유저를 새로 생성
-      const randomPassword = "" + Math.floor(Math.random() * 10000000);
+      const randomPassword = "" + Math.random().toString(36).slice(-8);
       const salt = await bcrypt.genSalt(10);
       const newPassword = await bcrypt.hash(randomPassword, salt);
       user = new User({
