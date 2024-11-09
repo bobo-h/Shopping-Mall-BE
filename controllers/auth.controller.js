@@ -41,13 +41,12 @@ authController.loginWithGoogle = async (req, res) => {
     });
 
     const { email, name } = ticket.getPayload();
-    console.log("eee", email, name);
 
     // 유저가 존재하는지 찾기
     let user = await User.findOne({ email });
     if (!user) {
       // 없다 -> 유저를 새로 생성
-      const randomPassword = "" + Math.random().toString(36).slice(-8);
+      const randomPassword = "" + Math.floor(Math.random() * 10000000);
       const salt = await bcrypt.genSalt(10);
       const newPassword = await bcrypt.hash(randomPassword, salt);
       user = new User({
