@@ -152,7 +152,6 @@ productController.checkItemListStock = async (itemList) => {
 
 productController.getDeletedProducts = async (req, res) => {
   try {
-    const PAGE_SIZE = 10;
     const { page } = req.query;
     const cond = { isDelete: true };
     let query = Product.find(cond).sort({ createdAt: -1 });
