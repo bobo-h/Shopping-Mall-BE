@@ -150,4 +150,42 @@ productController.checkItemListStock = async (itemList) => {
   return insufficientStockItems;
 };
 
+productController.getDeletedProducts = async (req, res) => {
+  try {
+    const PAGE_SIZE = 10;
+    const { page } = req.query;
+    const cond = { isDelete: true };
+    let query = Product.find(cond).sort({ createdAt: -1 });
+    let response = { status: "success" };
+
+    if (page) {
+      query.skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE);
+      const totalItemNum = await Product.countDocuments(cond);
+      const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
+      response.totalPageNum = totalPageNum;
+    }
+
+    const deletedProductList = await query.exec();
+    response.data = deletedProductList;
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
+  }
+};
+
+productController.restoreProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await Product.findByIdAndUpdate(
+      { _id: productId },
+      { isDelete: false },
+      { new: true }
+    );
+    if (!product) throw new Error("Item doesn't exist or is already active");
+    res.status(200).json({ status: "success", product });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
+  }
+};
+
 module.exports = productController;

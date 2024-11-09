@@ -26,6 +26,20 @@ router.delete(
   productController.deleteProduct
 );
 
+router.get(
+  "/deletedProducts",
+  authController.authenticate,
+  authController.checkAdminPermission,
+  productController.getDeletedProducts
+);
+
+router.patch(
+  "/restore/:id",
+  authController.authenticate,
+  authController.checkAdminPermission,
+  productController.restoreProduct
+);
+
 router.get("/:id", productController.getProductDetail);
 
 module.exports = router;
